@@ -7,12 +7,13 @@
 
 ## 🛠️ Technologies Used
 
-[![Python](https://img.shields.io/badge/Python-3.x-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![Python](https://img.shields.io/badge/Python-3.10-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![TensorFlow](https://img.shields.io/badge/TensorFlow-Deep%20Learning-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white)](https://www.tensorflow.org/)
 [![Magenta](https://img.shields.io/badge/Magenta-MusicVAE-8E24AA?style=for-the-badge)](https://magenta.tensorflow.org/)
 [![Unity](https://img.shields.io/badge/Unity-Game%20Engine-000000?style=for-the-badge&logo=unity&logoColor=white)](https://unity.com/)
 [![OSC](https://img.shields.io/badge/OSC-Open%20Sound%20Control-4CAF50?style=for-the-badge)](http://opensoundcontrol.org/)
 [![Anaconda](https://img.shields.io/badge/Anaconda-Environment-44A833?style=for-the-badge&logo=anaconda&logoColor=white)](https://www.anaconda.com/)
+[![MuseScore](https://img.shields.io/badge/MuseScore%20Studio-Notation%20Software-1E90FF?style=for-the-badge)](https://musescore.org/)
 
 ---
 
@@ -22,81 +23,125 @@
 
 Despite significant advancements in AI-based music generation, general-purpose pre-trained models often struggle when applied to highly structured and stylistically demanding genres.
 
-During preliminary experimentation using pre-trained MusicVAE models from Magenta, results in Classical and Jazz domains were coherent and musically convincing. However, when applied to Metal, several critical limitations emerged:
+Preliminary experiments using pre-trained MusicVAE models produced convincing results in Classical and Jazz domains. However, when applied to Metal, significant limitations emerged:
 
 - Lack of rhythmic consistency  
 - Weak harmonic coherence  
-- Absence of genre-specific features such as:
-  - Complex drum patterns  
-  - Fast tempo structures  
-  - Distorted harmonic textures  
+- Absence of genre-specific features such as complex drum patterns and fast tempo structures  
 
-These limitations were traced back to the insufficient representation of Metal music in the original training datasets.
+These issues were linked to the limited representation of Metal music within the original training datasets.
 
 ---
 
 ## 🎯 Project Objectives
 
-The core objective of this thesis was to develop a system capable of generating **dynamic, stylistically coherent Metal music in real time**, designed to be integrated into a Unity game environment.
+The primary objective of this thesis was to develop a system capable of generating **dynamic and stylistically coherent Metal music in real time**, integrated within a Unity game environment.
 
-The project goals included:
+Key goals:
 
-- ✅ **Creation of a Specialized Dataset**  
-  Collection, selection, and preprocessing (via Python) of a curated Metal MIDI corpus to compensate for dataset bias.
-
-- ✅ **Model Fine-Tuning**  
-  Adaptation and fine-tuning of MusicVAE architectures to:
-  - Generate complex drum patterns  
-  - Produce coherent melodic and harmonic structures  
-  - Respect Metal stylistic conventions  
-
-- ✅ **Real-Time Integration**  
-  Development of an OSC-based communication interface enabling:
-  - Real-time transmission of generated MIDI data  
-  - Dynamic synchronization between Magenta’s inference engine and Unity  
-  - Event-driven music generation responsive to gameplay  
+- ✅ Creation of a **specialized Metal MIDI dataset**
+- ✅ Fine-tuning MusicVAE models for genre-specific generation
+- ✅ Real-time integration through OSC communication
+- ✅ Development of a responsive procedural music system for interactive environments
 
 ---
 
 ## 🧠 Research Contribution
 
-The adopted methodology demonstrates how **targeted dataset training significantly enhances the adaptability of generative models**, extending their applicability beyond their original optimization scope.
+This project demonstrates how **targeted fine-tuning on domain-specific datasets significantly extends the expressive capabilities of generative models**, allowing them to operate effectively in stylistically complex domains.
 
-The final result is a **functional prototype** where procedural music generation is not merely a technical demonstration, but an interactive system that dynamically responds to user input inside a game environment.
-
----
-
-## 🎮 Application Context
-
-This project is part of a broader research direction aimed at developing assistive and inclusive technologies to enable individuals considered “fragile” (such as children, elderly people, or individuals with disabilities) to engage in therapeutic activities through music.
-
-Specifically, this thesis focuses on:
-
-> The development of an innovative real-time procedural music generation system for video games, designed as a potential foundation for interactive therapeutic applications.
-
----
-
-## ⚙️ System Architecture
-
-### Pipeline Overview
-
-1. 🎵 Metal MIDI Dataset  
-2. 🧠 MusicVAE (fine-tuned with TensorFlow)  
-3. 🐍 Python inference engine  
-4. 🔄 OSC communication layer  
-5. 🎮 Unity real-time integration  
-
-The system allows Unity to trigger musical generation events and receive dynamically generated MIDI sequences in real time.
+The final result is a **functional prototype** in which procedural generation dynamically responds to user interaction inside a game environment.
 
 ---
 
 ## 🚀 Installation
 
-### 1️⃣ Environment Setup (Anaconda)
+### 1️⃣ Environment Setup
 
-Install **Anaconda** and create a virtual environment:
+- Install **Anaconda**
+- Create a Python 3.10 virtual environment
+- Install:
+  - TensorFlow
+  - Magenta
+  - Required dependencies
 
-```bash
-conda create -n magenta_metal python=3.x
-conda activate magenta_metal
+> ⚠️ Note: Magenta and TensorFlow require careful dependency management. Python 3.10 is required for compatibility.
 
+---
+
+### 2️⃣ Dataset Preparation
+
+- Download Metal MIDI files (e.g., Metal genre corpus)
+- Organize files by track
+
+Using Python scripts (included in the `/scripts` folder):
+
+- Separate instrument tracks using `pretty_midi`
+  - Guitar
+  - Bass
+  - Drums
+- Clean and preprocess MIDI files
+- Convert MIDI collections into **TFRecord format**
+
+### 3️⃣ Model Fine-Tuning
+
+The following MusicVAE pre-trained models were fine-tuned:
+
+- 🎸 Guitar → `cat-mel_2bar_big`
+- 🎸 Bass → `cat-mel_2bar_med_chords`
+- 🥁 Drums → `cat-drums_2bar_small`
+
+Training parameters such as:
+
+- Number of training steps
+- Batch size
+- Checkpoint intervals
+
+can be configured inside the training script.
+
+---
+
+### 4️⃣ MIDI Post-Processing
+
+Generated MIDI outputs were:
+
+- Converted into readable musical scores
+- Audited and refined using **MuseScore Studio**
+
+This step allowed visual validation and musical evaluation of the generated sequences.
+
+---
+
+## 🎮 Unity Integration
+
+Once trained, the system was adapted for real-time use inside Unity.
+
+Instead of directly streaming MIDI:
+
+- Musical data is transmitted via **OSC (Open Sound Control)**
+- Unity receives generation parameters in real time
+- Short adaptive audio samples are triggered dynamically
+- Audio behavior changes according to AI-generated musical structures
+
+This architecture allows procedural music to respond directly to gameplay events.
+
+---
+
+## 📌 Current Status
+
+⚠️ This project is currently a **research prototype** and has not yet been released as a production-ready system.
+
+It serves as a proof-of-concept demonstrating:
+
+- Genre-specialized generative AI
+- Real-time procedural music systems
+- Interactive AI-driven audio design
+
+---
+
+## 🔬 Future Work
+
+- Expansion of the Metal dataset
+- Multi-instrument conditioning
+- Emotional modulation models
+- Validation in therapeutic environments
