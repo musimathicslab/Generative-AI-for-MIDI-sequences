@@ -24,12 +24,11 @@
 Despite significant advancements in AI-based music generation, general-purpose pre-trained models often struggle when applied to highly structured and stylistically demanding genres.
 
 Preliminary experiments using pre-trained MusicVAE models produced convincing results in Classical and Jazz domains. However, when applied to Metal, significant limitations emerged:
+* **Lack of rhythmic consistency**
+* **Weak harmonic coherence**
+* **Absence of genre-specific features** (such as complex drum patterns and fast tempo structures)
 
-- Lack of rhythmic consistency  
-- Weak harmonic coherence  
-- Absence of genre-specific features such as complex drum patterns and fast tempo structures  
-
-These issues were linked to the limited representation of Metal music within the original training datasets.
+These issues were directly linked to the limited representation of Metal music within the original training datasets.
 
 ---
 
@@ -37,135 +36,110 @@ These issues were linked to the limited representation of Metal music within the
 
 The primary objective of this thesis was to develop a system capable of generating **dynamic and stylistically coherent Metal music in real time**, integrated within a Unity game environment.
 
-Key goals:
-
-- ✅ Creation of a **specialized Metal MIDI dataset**
-- ✅ Fine-tuning MusicVAE models for genre-specific generation
-- ✅ Real-time integration through OSC communication
-- ✅ Development of a responsive procedural music system for interactive environments
+**Key goals achieved:**
+* ✅ Creation of a **specialized Metal MIDI dataset**
+* ✅ Fine-tuning MusicVAE models for genre-specific generation
+* ✅ Real-time integration through **OSC communication**
+* ✅ Development of a responsive procedural music system for interactive environments
 
 ---
 
 ## 🧠 Research Contribution
 
-This project demonstrates how **targeted fine-tuning on domain-specific datasets significantly extends the expressive capabilities of generative models**, allowing them to operate effectively in stylistically complex domains.
+This project demonstrates how **targeted fine-tuning on domain-specific datasets significantly extends the expressive capabilities of generative models**, allowing them to operate effectively in stylistically complex domains. 
 
 The final result is a **functional prototype** in which procedural generation dynamically responds to user interaction inside a game environment.
 
 ---
 
-## 🚀 Installation
+## 🚀 Installation & Usage
 
 ### 1️⃣ Environment Setup
+1. Install [**Anaconda**](https://www.anaconda.com/).
+2. Create a Python 3.10 virtual environment.
+3. Install the required dependencies:
+   * `tensorflow`
+   * `magenta`
+   * Other requirements specified in your environment setup.
 
-- Install **Anaconda**
-- Create a Python 3.10 virtual environment
-- Install:
-  - TensorFlow
-  - Magenta
-  - Required dependencies
-
-> ⚠️ Note: Magenta and TensorFlow require careful dependency management. Python 3.10 is required for compatibility.
-
----
+> ⚠️ **Note:** Magenta and TensorFlow require careful dependency management. **Python 3.10** is strictly required for compatibility.
 
 ### 2️⃣ Dataset Preparation
-
-- Download Metal MIDI files (e.g., Metal genre corpus)
-- Place them inside your dataset directory.
-
-To separate instrumental tracks (Guitar, Bass, Drums), use:
-
-Scripts/splitter.py
-
-This script isolates individual instrument tracks from the original MIDI files.
+1. Download your Metal MIDI files (e.g., Metal genre corpus).
+2. Place them inside your designated dataset directory.
+3. To separate instrumental tracks (Guitar, Bass, Drums), run:
+   
+   👉 [`Scripts/splitter.py`](./Scripts/splitter.py)
+   
+   *This script isolates individual instrument tracks from the original MIDI files.*
 
 ### 3️⃣ TFRecord Conversion
+After splitting the tracks, convert each instrument dataset into the TFRecord format required by MusicVAE using the following scripts:
 
-After splitting the tracks, convert each instrument dataset into TFRecord format using:
-
-Scripts/convert_guitar_to_tf.py
-
-Scripts/convert_bass_to_tf.py
-
-Scripts/convert_drums_to_tf.py
-
-These scripts prepare the data in a format compatible with MusicVAE training.
-
----
+* 🎸 **Guitar:** [`Scripts/convert_guitar_to_tf.py`](./Scripts/convert_guitar_to_tf.py)
+* 🎸 **Bass:** [`Scripts/convert_bass_to_tf.py`](./Scripts/convert_bass_to_tf.py)
+* 🥁 **Drums:** [`Scripts/convert_drums_to_tf.py`](./Scripts/convert_drums_to_tf.py)
 
 ### 4️⃣ Model Fine-Tuning
+The following pre-trained MusicVAE models were selected for fine-tuning based on the instrument:
 
-The following pre-trained MusicVAE models were fine-tuned:
+| Instrument | Base Model | Training Script |
+| :--- | :--- | :--- |
+| 🎸 **Guitar** | `cat-mel_2bar_big` | [`Scripts/train_guitar.py`](./Scripts/train_guitar.py) |
+| 🎸 **Bass** | `cat-mel_2bar_med_chords` | [`Scripts/train_bass.py`](./Scripts/train_bass.py) |
+| 🥁 **Drums** | `cat-drums_2bar_small` | [`Scripts/train_drums.py`](./Scripts/train_drums.py) |
 
-🎸 Guitar → cat-mel_2bar_big
-
-🎸 Bass → cat-mel_2bar_med_chords
-
-🥁 Drums → cat-drums_2bar_small
-
-To start training:
-
-Scripts/train_guitar.py
-
-Scripts/train_bass.py
-
-Scripts/train_drums.py
-
-Training parameters such as:
-
-Number of training steps ;
-Batch size ; 
-Checkpoint intervals ; can be configured directly inside each training script.
+**Configuration:** Training parameters can be configured directly inside each training script. Key parameters include:
+* `num_steps`: Number of training steps
+* `batch_size`: Batch size
+* `checkpoint_interval`: Frequency of saved checkpoints
 
 ---
 
-## MIDI Generation
-After training, generate new MIDI sequences using:
+## 🎹 MIDI Generation
 
-Scripts/generate_MIDI.py
+After training your models, you can generate new, original MIDI sequences using:
+
+👉 [`Scripts/generate_MIDI.py`](./Scripts/generate_MIDI.py)
 
 ---
 
-## Musical Validation
-Generated MIDI files were imported into MuseScore Studio for:
+## 🎼 Musical Validation
 
-Score visualization, Structural validation, Auditory evaluation,
-
-This step allowed musical inspection and refinement of the generated sequences.
+Generated MIDI files were imported into **MuseScore Studio** for rigorous evaluation. This step allowed for deep musical inspection and refinement of the generated sequences through:
+* 🎼 **Score visualization**
+* 🏗️ **Structural validation**
+* 🎧 **Auditory evaluation**
 
 ---
 
 ## 🎮 Unity Integration
 
-Once trained, the system was adapted for real-time use inside Unity.
+Once trained, the system was adapted for real-time use inside Unity. Instead of directly streaming raw MIDI files, the system uses a more dynamic approach:
 
-Instead of directly streaming MIDI:
+1.  **OSC Protocol:** Musical data is transmitted via **OSC (Open Sound Control)**.
+2.  **Real-Time Parameters:** Unity receives generation parameters in real time.
+3.  **Dynamic Audio:** Short adaptive audio samples are triggered dynamically.
+4.  **Responsive Gameplay:** Audio behavior changes fluidly according to the AI-generated musical structures.
 
-- Musical data is transmitted via **OSC (Open Sound Control)**
-- Unity receives generation parameters in real time
-- Short adaptive audio samples are triggered dynamically
-- Audio behavior changes according to AI-generated musical structures
-
-This architecture allows procedural music to respond directly to gameplay events.
+This architecture allows procedural music to respond directly and instantly to gameplay events.
 
 ---
 
 ## 📌 Current Status
 
-⚠️ This project is currently a **research prototype** and has not yet been released as a production-ready system.
+> ⚠️ **Disclaimer:** This project is currently a **research prototype** and has not yet been released as a production-ready system.
 
-It serves as a proof-of-concept demonstrating:
-
-- Genre-specialized generative AI
-- Real-time procedural music systems
-- Interactive AI-driven audio design
+It serves as a comprehensive proof-of-concept demonstrating:
+* Genre-specialized generative AI
+* Real-time procedural music systems
+* Interactive AI-driven audio design
 
 ---
 
 ## 🔬 Future Work
 
-- Expansion of the Metal dataset
-- Multi-instrument conditioning
-- Emotional modulation models
-- Validation in therapeutic environments
+* 📈 **Expansion** of the Metal dataset for broader stylistic coverage.
+* 🔗 **Multi-instrument conditioning** for tighter band cohesion.
+* 🎭 **Emotional modulation models** to drive music based on game tension.
+* 🏥 **Validation in therapeutic environments** (e.g., active music therapy).
