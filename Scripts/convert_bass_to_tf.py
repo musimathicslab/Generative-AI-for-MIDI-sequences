@@ -3,7 +3,7 @@ import tensorflow as tf
 from magenta.models.music_vae.data import OneHotMelodyConverter
 import note_seq
 
-# ==================== MODIFICA QUESTO PERCORSO ====================
+# ==================== MODIFICA QUESTI PERCORSI ====================
 your_bass_midi_folder = ""
 # ==================================================================
 OUTPUT_TFRECORD = ""
