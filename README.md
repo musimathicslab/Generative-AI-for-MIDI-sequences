@@ -72,43 +72,67 @@ The final result is a **functional prototype** in which procedural generation dy
 ### 2️⃣ Dataset Preparation
 
 - Download Metal MIDI files (e.g., Metal genre corpus)
-- Organize files by track
+- Place them inside your dataset directory.
 
-Using Python scripts (included in the `/scripts` folder):
+To separate instrumental tracks (Guitar, Bass, Drums), use:
 
-- Separate instrument tracks using `pretty_midi`
-  - Guitar
-  - Bass
-  - Drums
-- Clean and preprocess MIDI files
-- Convert MIDI collections into **TFRecord format**
+Scripts/splitter.py
 
-### 3️⃣ Model Fine-Tuning
+This script isolates individual instrument tracks from the original MIDI files.
 
-The following MusicVAE pre-trained models were fine-tuned:
+### 3️⃣ TFRecord Conversion
 
-- 🎸 Guitar → `cat-mel_2bar_big`
-- 🎸 Bass → `cat-mel_2bar_med_chords`
-- 🥁 Drums → `cat-drums_2bar_small`
+After splitting the tracks, convert each instrument dataset into TFRecord format using:
 
-Training parameters such as:
+Scripts/convert_guitar_to_tf.py
 
-- Number of training steps
-- Batch size
-- Checkpoint intervals
+Scripts/convert_bass_to_tf.py
 
-can be configured inside the training script.
+Scripts/convert_drums_to_tf.py
+
+These scripts prepare the data in a format compatible with MusicVAE training.
 
 ---
 
-### 4️⃣ MIDI Post-Processing
+### 4️⃣ Model Fine-Tuning
 
-Generated MIDI outputs were:
+The following pre-trained MusicVAE models were fine-tuned:
 
-- Converted into readable musical scores
-- Audited and refined using **MuseScore Studio**
+🎸 Guitar → cat-mel_2bar_big
 
-This step allowed visual validation and musical evaluation of the generated sequences.
+🎸 Bass → cat-mel_2bar_med_chords
+
+🥁 Drums → cat-drums_2bar_small
+
+To start training:
+
+Scripts/train_guitar.py
+
+Scripts/train_bass.py
+
+Scripts/train_drums.py
+
+Training parameters such as:
+
+Number of training steps ;
+Batch size ; 
+Checkpoint intervals ; can be configured directly inside each training script.
+
+---
+
+## MIDI Generation
+After training, generate new MIDI sequences using:
+
+Scripts/generate_MIDI.py
+
+---
+
+## Musical Validation
+Generated MIDI files were imported into MuseScore Studio for:
+
+Score visualization, Structural validation, Auditory evaluation,
+
+This step allowed musical inspection and refinement of the generated sequences.
 
 ---
 
