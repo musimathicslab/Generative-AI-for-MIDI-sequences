@@ -21,17 +21,34 @@
 
 **Generative AI for MIDI Sequences** is a thesis project focused on extending the capabilities of generative music models for stylistically complex genres — specifically **Metal music** — and integrating real-time procedural generation into a Unity-based interactive environment.
 
-Preliminary experiments using pre-trained MusicVAE models showed limitations in rhythmic consistency and harmonic coherence for the Metal genre. This project overcomes those barriers through a custom pipeline for domain-specific fine-tuning and real-time synthesis.
+Despite significant advancements in AI-based music generation, general-purpose pre-trained models often struggle when applied to highly structured and stylistically demanding genres.
+
+Preliminary experiments using pre-trained MusicVAE models produced convincing results in Classical and Jazz domains. However, when applied to Metal, significant limitations emerged:
+* **Lack of rhythmic consistency**
+* **Weak harmonic coherence**
+* **Absence of genre-specific features** (such as complex drum patterns and fast tempo structures)
+
+These issues were directly linked to the limited representation of Metal music within the original training datasets.
 
 ---
 
 ## 🎯 Project Objectives
 
+The primary objective of this thesis was to develop a system capable of generating **dynamic and stylistically coherent Metal music in real time**, integrated within a Unity game environment.
+
 **Key goals achieved:**
-* ✅ Creation of a **specialized Metal MIDI dataset**.
-* ✅ Fine-tuning MusicVAE models for genre-specific generation.
-* ✅ Real-time integration through **OSC communication**.
-* ✅ Development of a responsive procedural music system that manages **interactive game logic (such as card selection)**.
+* ✅ Creation of a **specialized Metal MIDI dataset**
+* ✅ Fine-tuning MusicVAE models for genre-specific generation
+* ✅ Real-time integration through **OSC communication**
+* ✅ Development of a responsive procedural music system for interactive environments
+
+---
+
+## 🧠 Research Contribution
+
+This project demonstrates how **targeted fine-tuning on domain-specific datasets significantly extends the expressive capabilities of generative models**, allowing them to operate effectively in stylistically complex domains. 
+
+The final result is a **functional prototype** in which procedural generation dynamically responds to user interaction inside a game environment.
 
 ---
 
@@ -42,10 +59,30 @@ Preliminary experiments using pre-trained MusicVAE models showed limitations in 
 2. Create a Python 3.10 virtual environment.
 3. Install the required dependencies (`tensorflow`, `magenta`, etc.).
 
-### 2️⃣ Dataset Preparation & Training
-* **Split Tracks:** 👉 [`Scripts/splitter.py`](./Scripts/splitter.py)
-* **Convert to TFRecord:** Use scripts for [**Guitar**](./Scripts/convert_guitar_to_tf.py), [**Bass**](./Scripts/convert_bass_to_tf.py), and [**Drums**](./Scripts/convert_drums_to_tf.py).
-* **Training:** Run the dedicated training scripts for each instrument: [`train_guitar.py`](./Scripts/train_guitar.py), [`train_bass.py`](./Scripts/train_bass.py), or [`train_drums.py`](./Scripts/train_drums.py).
+> ⚠️ **Note:** Magenta and TensorFlow require careful dependency management. **Python 3.10** is strictly required for compatibility.
+
+### 2️⃣ Dataset Preparation
+1. Download your Metal MIDI files.
+2. Place them inside your designated dataset directory.
+3. To separate instrumental tracks (Guitar, Bass, Drums), run:
+   👉 [`Scripts/splitter.py`](./Scripts/splitter.py)
+
+### 3️⃣ TFRecord Conversion
+After splitting the tracks, convert each instrument dataset into the TFRecord format required by MusicVAE:
+* 🎸 **Guitar:** [`Scripts/convert_guitar_to_tf.py`](./Scripts/convert_guitar_to_tf.py)
+* 🎸 **Bass:** [`Scripts/convert_bass_to_tf.py`](./Scripts/convert_bass_to_tf.py)
+* 🥁 **Drums:** [`Scripts/convert_drums_to_tf.py`](./Scripts/convert_drums_to_tf.py)
+
+### 4️⃣ Model Fine-Tuning
+The following pre-trained MusicVAE models were selected for fine-tuning based on the instrument:
+
+| Instrument | Base Model | Training Script |
+| :--- | :--- | :--- |
+| 🎸 **Guitar** | `cat-mel_2bar_big` | [`Scripts/train_guitar.py`](./Scripts/train_guitar.py) |
+| 🎸 **Bass** | `cat-mel_2bar_med_chords` | [`Scripts/train_bass.py`](./Scripts/train_bass.py) |
+| 🥁 **Drums** | `cat-drums_2bar_small` | [`Scripts/train_drums.py`](./Scripts/train_drums.py) |
+
+**Configuration:** Training parameters (`num_steps`, `batch_size`, `checkpoint_interval`) can be configured directly inside each script.
 
 ---
 
