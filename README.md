@@ -57,25 +57,18 @@ The final result is a **functional prototype** in which procedural generation dy
 ### 1️⃣ Environment Setup
 1. Install [**Anaconda**](https://www.anaconda.com/).
 2. Create a Python 3.10 virtual environment.
-3. Install the required dependencies:
-   * `tensorflow`
-   * `magenta`
-   * Other requirements specified in your environment setup.
+3. Install the required dependencies (`tensorflow`, `magenta`, etc.).
 
 > ⚠️ **Note:** Magenta and TensorFlow require careful dependency management. **Python 3.10** is strictly required for compatibility.
 
 ### 2️⃣ Dataset Preparation
-1. Download your Metal MIDI files (e.g., Metal genre corpus).
+1. Download your Metal MIDI files.
 2. Place them inside your designated dataset directory.
 3. To separate instrumental tracks (Guitar, Bass, Drums), run:
-   
    👉 [`Scripts/splitter.py`](./Scripts/splitter.py)
-   
-   *This script isolates individual instrument tracks from the original MIDI files.*
 
 ### 3️⃣ TFRecord Conversion
-After splitting the tracks, convert each instrument dataset into the TFRecord format required by MusicVAE using the following scripts:
-
+After splitting the tracks, convert each instrument dataset into the TFRecord format required by MusicVAE:
 * 🎸 **Guitar:** [`Scripts/convert_guitar_to_tf.py`](./Scripts/convert_guitar_to_tf.py)
 * 🎸 **Bass:** [`Scripts/convert_bass_to_tf.py`](./Scripts/convert_bass_to_tf.py)
 * 🥁 **Drums:** [`Scripts/convert_drums_to_tf.py`](./Scripts/convert_drums_to_tf.py)
@@ -89,10 +82,7 @@ The following pre-trained MusicVAE models were selected for fine-tuning based on
 | 🎸 **Bass** | `cat-mel_2bar_med_chords` | [`Scripts/train_bass.py`](./Scripts/train_bass.py) |
 | 🥁 **Drums** | `cat-drums_2bar_small` | [`Scripts/train_drums.py`](./Scripts/train_drums.py) |
 
-**Configuration:** Training parameters can be configured directly inside each training script. Key parameters include:
-* `num_steps`: Number of training steps
-* `batch_size`: Batch size
-* `checkpoint_interval`: Frequency of saved checkpoints
+**Configuration:** Training parameters (`num_steps`, `batch_size`, `checkpoint_interval`) can be configured directly inside each script.
 
 ---
 
@@ -102,11 +92,13 @@ After training your models, you can generate new, original MIDI sequences using:
 
 👉 [`Scripts/generate_MIDI.py`](./Scripts/generate_MIDI.py)
 
+**Customization:** The generation process is highly flexible. By modifying the parameters inside the script, you can vary the generated music at will—editing musical progressions, structural logic, and other core data to perfectly shape the final output to your liking.
+
 ---
 
 ## 🎼 Musical Validation
 
-Generated MIDI files were imported into **MuseScore Studio** for rigorous evaluation. This step allowed for deep musical inspection and refinement of the generated sequences through:
+Generated MIDI files were imported into **MuseScore Studio** for rigorous evaluation:
 * 🎼 **Score visualization**
 * 🏗️ **Structural validation**
 * 🎧 **Auditory evaluation**
@@ -115,14 +107,19 @@ Generated MIDI files were imported into **MuseScore Studio** for rigorous evalua
 
 ## 🎮 Unity Integration
 
-Once trained, the system was adapted for real-time use inside Unity. Instead of directly streaming raw MIDI files, the system uses a more dynamic approach:
+Once trained, the system is adapted for real-time use inside Unity using the **OSC (Open Sound Control)** protocol to trigger adaptive audio dynamically.
 
-1.  **OSC Protocol:** Musical data is transmitted via **OSC (Open Sound Control)**.
-2.  **Real-Time Parameters:** Unity receives generation parameters in real time.
-3.  **Dynamic Audio:** Short adaptive audio samples are triggered dynamically.
-4.  **Responsive Gameplay:** Audio behavior changes fluidly according to the AI-generated musical structures.
+### Setup Instructions
 
-This architecture allows procedural music to respond directly and instantly to gameplay events.
+1. **Install OSCJack:** Download and import the [**OSCJack package**](https://github.com/keijiro/OscJack) into your Unity project, following the installation instructions on its GitHub page.
+2. **Create the Manager:** In your Unity scene hierarchy, create an empty GameObject and name it `OSCManager`.
+3. **Create the Players:** Inside `OSCManager`, create 5 separate child GameObjects: `GuitarPlayer`, `BassPlayer`, `KickPlayer`, `SnarePlayer`, and `HiHatPlayer`.
+4. **Assign Audio Samples:** Add an `AudioSource` component to each of those 5 Player GameObjects. Assign a short, representative audio sample (downloaded from the internet) to the `AudioClip` property of each one.
+5. **Attach the Script:** Add the receiver script to your `OSCManager` GameObject:
+   👉 [`Scripts/MetalReceiver.cs`](./Scripts/MetalReceiver.cs)
+6. **Link Components:** Select the `OSCManager`. In the Unity Inspector, drag and drop the respective Player GameObjects into the newly exposed fields created by the script.
+
+This architecture allows procedural music to respond directly and instantly to gameplay events, changing the audio behavior fluidly according to the AI-generated musical structures.
 
 ---
 
