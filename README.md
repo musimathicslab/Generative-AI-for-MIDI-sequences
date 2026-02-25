@@ -82,11 +82,20 @@ The system uses the **OSC (Open Sound Control)** protocol to trigger audio sampl
 
 ---
 
-## 📌 Status & Future Work
+## 📌 Current Status
 
-> ⚠️ **Disclaimer:** This project is a research prototype and is not yet intended for production use.
+> ⚠️ **Disclaimer:** This project is currently a **research prototype** and has not yet been released as a production-ready system.
 
-**Future Developments:**
-* Expansion of the Metal dataset.
-* Multi-instrument conditioning for tighter band cohesion.
-* Emotional modulation models to drive music based on gameplay tension.
+It serves as a comprehensive proof-of-concept demonstrating:
+* Genre-specialized generative AI
+* Real-time procedural music systems
+* Interactive AI-driven audio design
+
+---
+
+## 🔬 Future Work
+
+* 📈 **Expansion** of the Metal dataset for broader stylistic coverage.
+* 🔗 **Multi-instrument conditioning** for tighter band cohesion.
+* 🎭 **Emotional modulation models** to drive music based on game tension.
+* 🏥 **Validation in therapeutic environments** (e.g., active music therapy).
