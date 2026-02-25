@@ -109,17 +109,25 @@ Generated MIDI files were imported into **MuseScore Studio** for rigorous evalua
 
 Once trained, the system is adapted for real-time use inside Unity using the **OSC (Open Sound Control)** protocol to trigger adaptive audio dynamically.
 
-### Setup Instructions
+### 🛠️ Setup Instructions
 
 1. **Install OSCJack:** Download and import the [**OSCJack package**](https://github.com/keijiro/OscJack) into your Unity project, following the installation instructions on its GitHub page.
 2. **Create the Manager:** In your Unity scene hierarchy, create an empty GameObject and name it `OSCManager`.
 3. **Create the Players:** Inside `OSCManager`, create 5 separate child GameObjects: `GuitarPlayer`, `BassPlayer`, `KickPlayer`, `SnarePlayer`, and `HiHatPlayer`.
-4. **Assign Audio Samples:** Add an `AudioSource` component to each of those 5 Player GameObjects. Assign a short, representative audio sample (downloaded from the internet) to the `AudioClip` property of each one.
+4. **Assign Audio Samples:** Add an `AudioSource` component to each of those 5 Player GameObjects. Assign a short, representative audio sample to the `AudioClip` property of ciascuno.
 5. **Attach the Script:** Add the receiver script to your `OSCManager` GameObject:
    👉 [`Scripts/MetalReceiver.cs`](./Scripts/MetalReceiver.cs)
-6. **Link Components:** Select the `OSCManager`. In the Unity Inspector, drag and drop the respective Player GameObjects into the newly exposed fields created by the script.
+6. **Link Components:** In the Unity Inspector for `OSCManager`, drag and drop the respective Player GameObjects into the fields created by the script (Guitar, Bass, etc.).
 
-This architecture allows procedural music to respond directly and instantly to gameplay events, changing the audio behavior fluidly according to the AI-generated musical structures.
+### ⚡ Running the System
+
+To start the real-time generation and playback, follow these steps:
+
+1.  **Start the OSC Server:** Open the **Anaconda Prompt**, activate your environment, and run the playback script:
+    👉 [`Scripts/playbackOSC.py`](./Scripts/playbackOSC.py)
+    *This script acts as the server that generates the Metal music in real-time and sends the data to Unity.*
+2.  **Play in Unity:** Click the **Play** button in the Unity Editor. You should now hear the procedurally generated music.
+3.  **Real-Time Tweaking:** While the system is running (or before starting), you can modify the generation logic directly inside the Python code. Just like in the MIDI generation phase, you can hand-edit **musical progressions**, **parameters**, and **generation data** to change the musical output on the fly.
 
 ---
 
